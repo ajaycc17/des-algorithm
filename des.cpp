@@ -4,6 +4,7 @@
 #include <cmath>
 #include <algorithm>
 using namespace std;
+string round15 = "";
 
 // Array to hold the 16 version of keys
 string round_keys[16];
@@ -327,7 +328,7 @@ string DES(string pt)
     string right = perm.substr(32, 32);
 
     // The plain text is run through round functions 16 times
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 15; i++)
     {
         string right_expanded = "";
 
@@ -377,6 +378,58 @@ string DES(string pt)
     }
     // The halves of the plain text are concatenated
     string combined_text = left + right;
+    cout << bin2hex(combined_text) << endl;
+    // The 16th round
+    for (int i = 15; i < 16; i++)
+    {
+        string right_expanded = "";
+
+        // right half of the plain text is expanded
+        for (int i = 0; i < 48; i++)
+        {
+            right_expanded += right[expansion_table[i] - 1];
+        }
+
+        // result is xored with a key
+        string xored = Xor(round_keys[i], right_expanded);
+        string res = "";
+
+        // result is divided into 8 equal parts and passed to the S-boxes
+        // each s-box reduces passed 6 bits to 4 bits
+        for (int i = 0; i < 8; i++)
+        {
+            // Finding row and column indices to lookup the substituition box
+            string row1 = xored.substr(i * 6, 1) + xored.substr(i * 6 + 5, 1);
+            int row = binToDec(row1);
+
+            // finding column
+            string col1 = xored.substr(i * 6 + 1, 1) + xored.substr(i * 6 + 2, 1) + xored.substr(i * 6 + 3, 1) + xored.substr(i * 6 + 4, 1);
+            int col = binToDec(col1);
+            int val = substition_boxes[i][row][col];
+            res += decToBin(val);
+        }
+
+        // another permutation
+        string perm2 = "";
+        for (int i = 0; i < 32; i++)
+        {
+            perm2 += res[permutation_tab[i] - 1];
+        }
+
+        // result is xored with the left half
+        xored = Xor(perm2, left);
+
+        // the left and the right parts of the plain text are swapped
+        left = xored;
+        if (i < 15)
+        {
+            string temp = right;
+            right = xored;
+            left = temp;
+        }
+    }
+    // The halves of the plain text are concatenated
+    combined_text = left + right;
     string ciphertext = "";
 
     // The inverse of the initial permuttaion is used
@@ -384,6 +437,7 @@ string DES(string pt)
     {
         ciphertext += combined_text[inverse_permutation[i] - 1];
     }
+    cout<<bin2hex(combined_text)<<endl;
 
     // return the cipher text generated
     return ciphertext;
