@@ -1,4 +1,7 @@
+# custom
 .vscode
+/diff_dist_tables
+
 # Prerequisites
 *.d
 
