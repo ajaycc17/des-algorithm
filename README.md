@@ -1,6 +1,6 @@
 # DES block cipher: BS and MS Project- IISERB(2022-23)
 
-Under the BS project, the working principles of DES were studied and used to implement the DES block cipher which can encrypt and decrypt any given string message hash function. Later, under the MS project, the properties of the algorithm were analysed and a differential attack was mount on the round-reduced(6 rounds) version of DES. This repository contains both the works combined and uses C++ programming language for implementation of the functions and attacks.
+Under the BS project, the working principles of DES were studied and used to implement the DES block cipher which can encrypt and decrypt any given string message. Later, under the MS project, the properties of the algorithm were analysed and a differential attack was mount on the round-reduced(6 rounds) version of DES. This repository contains both the works combined and uses C++ programming language for implementation of the functions and attacks.
 
 ## Status of the project
 
